@@ -3,12 +3,13 @@ version: '3.3'
 services:
   user:
     build: ./User
+    restart: on-failure:100
     depends_on:
       - 'user-db'
     ports:
-      - 8000:8000
+      - 8001:8000
     volumes:
-      - "/home/ubuntu/coupontribute/User:/app"
+      - "./User:/app"
   user-db:
     image: mysql
     command: --default-authentication-plugin=mysql_native_password
@@ -17,3 +18,20 @@ services:
       MYSQL_ROOT_PASSWORD: example
     volumes:
       - "/opt/data/user:/var/lib/mysql"
+  restaurant:
+    build: ./Restaurant
+    restart: on-failure:100
+    depends_on:
+      - 'restaurant-db'
+    ports:
+      - 8002:8000
+    volumes:
+      - "./Restaurant:/app"
+  restaurant-db:
+    image: mysql
+    command: --default-authentication-plugin=mysql_native_password
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: example
+    volumes:
+      - "/opt/data/restaurant:/var/lib/mysql"
