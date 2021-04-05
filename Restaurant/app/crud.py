@@ -2,7 +2,9 @@ from sqlalchemy.orm import Session
 from passlib.context import CryptContext
 from fastapi import HTTPException, status
 
-from . import models, schemas
+from . import models, schemas, events
+
+events.connect()
 
 def get_restaurant(db: Session, restaurant_id: int):
     print({'restaurant_id': restaurant_id})

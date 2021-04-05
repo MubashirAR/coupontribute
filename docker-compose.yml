@@ -51,3 +51,6 @@ services:
     command: mongod --bind_ip 0.0.0.0
     volumes:
       - "/opt/data/coupon:/data/db"
+  event-bus:
+    image: rabbitmq:alpine
+    restart: always

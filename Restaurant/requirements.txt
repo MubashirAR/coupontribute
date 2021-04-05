@@ -77,3 +77,4 @@ python-jose[cryptography]
 passlib[bcrypt]
 sqlalchemy
 mysqlclient
+pika
