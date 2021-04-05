@@ -3,7 +3,7 @@ version: '3.3'
 services:
   user:
     build: ./User
-    restart: on-failure:100
+    restart: always
     depends_on:
       - 'user-db'
     ports:
@@ -20,7 +20,7 @@ services:
       - "/opt/data/user:/var/lib/mysql"
   restaurant:
     build: ./Restaurant
-    restart: on-failure:100
+    restart: always
     depends_on:
       - 'restaurant-db'
     ports:
@@ -35,3 +35,19 @@ services:
       MYSQL_ROOT_PASSWORD: example
     volumes:
       - "/opt/data/restaurant:/var/lib/mysql"
+  coupon:
+    build: ./Coupon
+    restart: always
+    depends_on:
+      - 'user'
+    ports:
+      - '8003:3000'
+    volumes:
+      - './Coupon:/app'
+      - /app/node_modules/
+  coupon-db:
+    image: mongo
+    restart: always
+    command: mongod --bind_ip 0.0.0.0
+    volumes:
+      - "/opt/data/coupon:/data/db"
