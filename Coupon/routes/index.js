@@ -17,10 +17,17 @@ router.get('/', async function(req, res, next) {
       throw error1;
     }
     var queue = 'hello';
-    var msg = 'Hello world';
+    var msg = JSON.stringify({
+      'task': 'hello',
+      'id': Math.round(Math.random()*100000) + '',
+      'args': ['id', 'asdasd'],
+      "kwargs": {},
+      "retries": 0,
+      "eta": new Date()
+    });
   
     channel.assertQueue(queue, {
-      durable: false
+      durable: true
     });
   
     channel.sendToQueue(queue, Buffer.from(msg));

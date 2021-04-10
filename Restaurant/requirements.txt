@@ -78,3 +78,8 @@ passlib[bcrypt]
 sqlalchemy
 mysqlclient
 pika
+asyncio
+aio_pika
+celery
+kombu
+yosun

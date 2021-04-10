@@ -3,7 +3,7 @@ version: '3.3'
 services:
   user:
     build: ./User
-    restart: always
+    restart: on-failure:1000
     depends_on:
       - 'user-db'
     ports:
@@ -13,7 +13,7 @@ services:
   user-db:
     image: mysql
     command: --default-authentication-plugin=mysql_native_password
-    restart: always
+    restart: on-failure
     environment:
       MYSQL_ROOT_PASSWORD: example
     volumes:
@@ -27,17 +27,29 @@ services:
       - 8002:8000
     volumes:
       - "./Restaurant:/app"
+  restaurant-celery:
+    build: ./Restaurant
+    command: celery --app app.main.celery_app worker -c 2 --loglevel=info
+    restart: always
+    command: python app/celery/consumers.py
+    depends_on:
+      - 'restaurant'
+      - 'restaurant-db'
+    ports:
+      - 8010:8000
+    volumes:
+      - "./Restaurant:/app"
   restaurant-db:
     image: mysql
     command: --default-authentication-plugin=mysql_native_password
-    restart: always
+    restart: on-failure
     environment:
       MYSQL_ROOT_PASSWORD: example
     volumes:
       - "/opt/data/restaurant:/var/lib/mysql"
   coupon:
     build: ./Coupon
-    restart: always
+    restart: on-failure
     depends_on:
       - 'user'
     ports:
@@ -47,10 +59,13 @@ services:
       - /app/node_modules/
   coupon-db:
     image: mongo
-    restart: always
+    restart: on-failure
     command: mongod --bind_ip 0.0.0.0
     volumes:
       - "/opt/data/coupon:/data/db"
   event-bus:
-    image: rabbitmq:alpine
-    restart: always
+    image: rabbitmq:management-alpine
+    restart: on-failure
+    # command: rabbitmqctl reset
+    ports:
+      - '15672:15672'
