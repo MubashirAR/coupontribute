@@ -44,13 +44,13 @@ def create_restaurant(restaurant: schemas.RestaurantCreate, db: Session = Depend
 
 
 @app.get("/restaurant/", response_model=List[schemas.Restaurant])
-def read_restaurants(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
+def get_restaurants(skip: int = 0, limit: int = 100, db: Session = Depends(get_db)):
     # publishers.publish()
     return crud.get_restaurants(db, skip=skip, limit=limit)
 
 
 @app.get("/restaurant/{restaurant_id}", response_model=schemas.Restaurant)
-def read_restaurant(restaurant_id: int, db: Session = Depends(get_db)):
+def get_restaurant(restaurant_id: int, db: Session = Depends(get_db)):
     db_restaurant = crud.get_restaurant(db, restaurant_id=restaurant_id)
     if db_restaurant is None:
         raise HTTPException(status_code=404, detail="Restaurant not found")

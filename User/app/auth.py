@@ -20,3 +20,4 @@ def create_access_token(data: dict, expires_delta: Optional[timedelta] = None):
 
 def decode_token(token):
     return jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+    

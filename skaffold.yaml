@@ -1,0 +1,20 @@
+apiVersion: skaffold/v2beta14
+kind: Config
+deploy:
+  kubectl:
+    manifests:
+      - infra/k8s/*
+  logs:
+    prefix: container
+build:
+  local:
+    push: false
+  artifacts:
+    - image: mubashirar/coupontribute-user
+      context: User
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: 'app/*.py'
+            dest: .
