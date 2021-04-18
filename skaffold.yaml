@@ -18,3 +18,11 @@ build:
         manual:
           - src: 'app/*.py'
             dest: .
+    - image: mubashirar/coupontribute-restaurant
+      context: Restaurant
+      docker:
+        dockerfile: Dockerfile
+      sync:
+        manual:
+          - src: 'app/*.py'
+            dest: .
