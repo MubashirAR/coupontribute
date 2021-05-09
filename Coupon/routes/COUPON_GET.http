@@ -1,0 +1,20 @@
+# This file needs the "Rest Client" VSCode plugin
+# Just select a request with its headers and body, "Ctrl/Cmd + Shift + p", "Rest Client: Send Request"
+
+GET http://localhost:8003/
+
+POST http://localhost:8003/
+Content-Type: application/json
+
+{
+    
+}
+
+POST http://localhost:8003/bulk
+Content-Type: application/json
+
+[{
+    
+}, {
+    
+}]

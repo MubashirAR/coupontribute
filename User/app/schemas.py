@@ -9,7 +9,10 @@ class TokenData(BaseModel):
     username: Optional[str] = None
 
 class UserBase(BaseModel):
+    name: str
+    phone: str
     email: str
+    roles: List[str] = []
 
 class UserCreate(UserBase):
 

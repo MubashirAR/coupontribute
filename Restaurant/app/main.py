@@ -14,7 +14,9 @@ from yosun import Yosun
 from . import crud, models, schemas
 from .celery import publishers
 from .db_connect import SessionLocal, engine
+from .events import connect
 
+# connect()
 # models.Base.metadata.create_all(bind=engine, checkfirst=True)
 
 app = FastAPI()
@@ -100,8 +102,9 @@ def get_restaurant(restaurant_id: int, db: Session = Depends(get_db)):
 # rests = db.query('information_schema').all()
 # print('rests')
 # print(rests)
+
 CELERY_DEFAULT_QUEUE = 'hello'
-celery_app = Celery('app', broker='pyamqp://event-bus//', backend='db+mysql://root:example@restaurant-db/')
+celery_app = Celery('app', broker='pyamqp://event-bus//', backend='db+mysql://root:example@restaurant-db-srv/')
 celery_app.control.add_consumer('hello', reply=True, durable= True)
 @celery_app.task
 def add(x):

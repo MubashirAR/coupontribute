@@ -5,12 +5,12 @@ services:
     build: ./User
     restart: on-failure:1000
     depends_on:
-      - 'user-db'
+      - 'user-db-srv'
     ports:
       - 8001:8000
     volumes:
       - "./User:/app"
-  user-db:
+  user-db-srv:
     image: mysql
     command: --default-authentication-plugin=mysql_native_password
     restart: on-failure
@@ -22,7 +22,7 @@ services:
     build: ./Restaurant
     restart: always
     depends_on:
-      - 'restaurant-db'
+      - 'restaurant-db-srv'
     ports:
       - 8002:8000
     volumes:
@@ -34,12 +34,13 @@ services:
     command: python app/celery/consumers.py
     depends_on:
       - 'restaurant'
-      - 'restaurant-db'
+      - 'restaurant-db-srv'
+      - 'event-bus'
     ports:
       - 8010:8000
     volumes:
       - "./Restaurant:/app"
-  restaurant-db:
+  restaurant-db-srv:
     image: mysql
     command: --default-authentication-plugin=mysql_native_password
     restart: on-failure
@@ -57,7 +58,7 @@ services:
     volumes:
       - './Coupon:/app'
       - /app/node_modules/
-  coupon-db:
+  coupon-db-srv:
     image: mongo
     restart: on-failure
     command: mongod --bind_ip 0.0.0.0
