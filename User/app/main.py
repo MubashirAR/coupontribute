@@ -5,6 +5,7 @@ from fastapi.security import OAuth2PasswordBearer, OAuth2PasswordRequestForm
 from fastapi import Depends, FastAPI, HTTPException
 from sqlalchemy.orm import Session
 from fastapi import HTTPException, status
+from starlette.middleware.sessions import SessionMiddleware
 
 from . import crud, models, schemas, auth, config
 from .db_connect import SessionLocal, engine
@@ -12,7 +13,7 @@ from .db_connect import SessionLocal, engine
 # models.Base.metadata.create_all(bind=engine, checkfirst=True)
 
 app = FastAPI()
-
+app.add_middleware(SessionMiddleware, secret_key="09d25e094faa6ca2556c818166b7a9563b93f7099f6f0f4caa6cf63b88e8d3e7")
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
 ACCESS_TOKEN_EXPIRE_MINUTES = 30
 

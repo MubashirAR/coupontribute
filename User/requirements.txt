@@ -4,3 +4,6 @@ python-jose[cryptography]
 passlib[bcrypt]
 sqlalchemy
 mysqlclient
+starlette
+alembic
+psycopg2
