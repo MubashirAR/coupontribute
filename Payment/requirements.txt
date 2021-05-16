@@ -1,0 +1,7 @@
+sqlalchemy
+pydantic
+fastapi
+passlib
+alembic
+psycopg2
+uvicorn
