@@ -1,23 +1,23 @@
 import pika
-
-print('before consuming')
+print('>>> consumers')
 params = pika.URLParameters('amqp://event-bus')
-print('before consuming')
+
 connection = pika.BlockingConnection(params)
-print('before consuming')
+
 channel = connection.channel()
-print('before consuming')
-channel.queue_declare(queue='admin')
+
+channel.queue_declare(queue='restaurant')
 
 def callback(ch, method, properties, body):
-    print('Received in admin')
+    print('Received in restaurant')
     print(body)
 
 
-channel.basic_consume(queue='admin', on_message_callback=callback)
+channel.basic_consume(queue='restaurant', on_message_callback=callback, auto_ack=True)
 
-print('Sterted Consuming!')
-
+print('start consuming')
 channel.start_consuming()
 
-# channel.close()
+channel.close()
+print('callback')
+callback()

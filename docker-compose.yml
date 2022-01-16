@@ -1,11 +1,11 @@
-version: '3.3'
+version: "3.3"
 
 services:
   user:
     build: ./User
     restart: on-failure:1000
     depends_on:
-      - 'user-db-srv'
+      - "user-db-srv"
     ports:
       - 8001:8000
     volumes:
@@ -24,7 +24,7 @@ services:
     build: ./Payment
     restart: on-failure:1000
     depends_on:
-      - 'payment-db-srv'
+      - "payment-db-srv"
     ports:
       - 8004:8000
     volumes:
@@ -41,20 +41,11 @@ services:
     build: ./Restaurant
     restart: always
     depends_on:
-      - 'restaurant-db-srv'
+      - "restaurant-db-srv"
     ports:
       - 8002:8000
     volumes:
       - "./Restaurant:/app"
-  restaurant-celery:
-    build: ./Restaurant
-    command: celery --app app.main.celery_app worker -c 2 --loglevel=info
-    restart: always
-    command: python app/celery/consumers.py
-    depends_on:
-      - 'restaurant'
-      - 'restaurant-db-srv'
-      - 'event-bus'
     ports:
       - 8010:8000
     volumes:
@@ -71,11 +62,11 @@ services:
     build: ./Coupon
     restart: on-failure
     depends_on:
-      - 'user'
+      - "user"
     ports:
-      - '8003:3000'
+      - "8003:3000"
     volumes:
-      - './Coupon:/app'
+      - "./Coupon:/app"
       - /app/node_modules/
   coupon-db-srv:
     image: mongo
@@ -88,4 +79,12 @@ services:
     restart: on-failure
     # command: rabbitmqctl reset
     ports:
-      - '15672:15672'
+      - "15672:15672"
+  restaurant-queue:
+    build: ./Restaurant
+    restart: always
+    command: python -u app/celery/consumers.py
+    depends_on:
+      - "restaurant"
+      - "restaurant-db-srv"
+      - "event-bus"
